@@ -1,0 +1,125 @@
+﻿<Window x:Class="BetfairBirzhaBot.Views.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:BetfairBirzhaBot.Views"
+        mc:Ignorable="d"
+        Title="MainWindow"
+        MinHeight="720" 
+        MinWidth="1300"
+        xmlns:viewmodels="clr-namespace:BetfairBirzhaBot.ViewModels"
+        xmlns:views="clr-namespace:BetfairBirzhaBot.Views"
+        >
+    <Window.Resources>
+        <Style TargetType="{x:Type Button}">
+            <Setter Property="Height" Value="70"/>
+            <Setter Property="Width" Value="200"/>
+            <Setter Property="FontSize" Value="16"/>
+
+            <Setter Property="Background" Value="#525252"/>
+            <Setter Property="Foreground" Value="#d1d1d1"/>
+            <Setter Property="BorderThickness" Value="0 0 0 2"/>
+            <Setter Property="BorderBrush" Value="#3d3d3d"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type Button}">
+                        <Border Background="{TemplateBinding Background}" BorderBrush="#3d3d3d" BorderThickness="0 0 0 1">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="#383838"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+    </Window.Resources>
+
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="891*"/>
+            <ColumnDefinition Width="674*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="70"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+
+        <Border Background="#464646" Grid.ColumnSpan="2">
+            <StackPanel Orientation="Horizontal">
+                <StackPanel.Resources>
+                    <!--<Style TargetType="{x:Type Butt}"-->
+                </StackPanel.Resources>
+                <Button
+                    Content="Главная" 
+                    Command="{Binding NavigateToMainCommand}"/>
+                <Button
+                    Content="Настройки стратегии"
+                    Command="{Binding NavigateToStrategyManagerCommand}"/>
+                <Button
+                    Content="Чёрный список лиг"
+                    Command="{Binding NavigateToLeagueBlackListCommand}"/>
+                <Button
+                    Command="{Binding NavigateToSygnalStoreCommand}"
+                    Content="Архив сигналов"/>
+                <Button
+                    Command="{Binding NavigateToTelegramSettingsCommand}"
+                    Content="Настройки Telegram"/>
+                <Border VerticalAlignment="Center" Opacity="0.5" Padding="20 0 0 0">
+                    <StackPanel>
+                        <TextBlock Foreground="LightGray" Text="Памяти используется"/>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Foreground="Yellow" Text="{Binding ProgramMemoryUsageMb}"/>
+                            <TextBlock Foreground="Yellow" Text=" MB"/>
+                        </StackPanel>
+                    </StackPanel>
+                </Border>
+                <Border VerticalAlignment="Center" Opacity="0.5" Padding="20 0 0 0">
+                    <StackPanel>
+                        <TextBlock Foreground="LightGray" Text="Игр в парсинге"/>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Foreground="Yellow" Text="{Binding GamesInParsingCount}"/>
+                        </StackPanel>
+                    </StackPanel>
+                </Border>
+                <Border VerticalAlignment="Center" Opacity="0.5" Padding="20 0 0 0">
+                    <StackPanel>
+                        <TextBlock Foreground="LightGray" Text="Среднее время парсинга игры"/>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Foreground="Yellow" Text="{Binding AverageGameParsingTime}"/>
+                            <TextBlock Foreground="Yellow" Text=" с."/>
+                        </StackPanel>
+                    </StackPanel>
+                </Border>
+            </StackPanel>
+        </Border>
+
+        <ContentControl Grid.Row="1" Content="{Binding CurrentViewModel}" Grid.ColumnSpan="2">
+            <ContentControl.Resources>
+                <DataTemplate DataType="{x:Type viewmodels:StrategyManagerViewModel}">
+                    <views:StrategyManagerView/>
+                </DataTemplate>
+                <DataTemplate DataType="{x:Type viewmodels:BotControlPanelViewModel}">
+                    <views:MainBotControlView/>
+                </DataTemplate>
+                <DataTemplate DataType="{x:Type viewmodels:GameInplayViewerViewModel}">
+                    <views:GameInplayViewerView/>
+                </DataTemplate>
+                <DataTemplate DataType="{x:Type viewmodels:LeaguesBlackListViewModel}">
+                    <views:LeaguesBlackListView/>
+                </DataTemplate>
+                <DataTemplate DataType="{x:Type viewmodels:SygnalsStoreViewModel}">
+                    <views:SygnalStoreView/>
+                </DataTemplate>
+                <DataTemplate DataType="{x:Type viewmodels:TelegramSettingsViewModel}">
+                    <views:TelegramSettingsView/>
+                </DataTemplate>
+            </ContentControl.Resources>
+        </ContentControl>
+    </Grid>
+
+</Window>

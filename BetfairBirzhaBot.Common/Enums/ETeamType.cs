@@ -1,0 +1,4 @@
+﻿namespace BetfairBirzhaBot.Common.Entities
+{
+   
+}

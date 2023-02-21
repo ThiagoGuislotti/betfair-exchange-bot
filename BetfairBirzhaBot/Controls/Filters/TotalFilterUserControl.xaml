@@ -1,0 +1,141 @@
+﻿<UserControl x:Class="BetfairBirzhaBot.Controls.Filters.TotalFilterUserControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:BetfairBirzhaBot.Controls.Filters"
+             mc:Ignorable="d" 
+             Height="50"
+             xmlns:converters="clr-namespace:BetfairBirzhaBot.Converters">
+    <UserControl.Resources>
+        <converters:EnumDescriptionConverter x:Key="EnumDescriptionConverter"/>
+        <converters:ConditionToEnabledConverter x:Key="ConditionToEnabledConverter"/>
+        <Style TargetType="{x:Type TextBox}">
+            <Setter Property="Height" Value="25"/>
+            <Setter Property="Foreground" Value="#2e2e2e"/>
+            <Setter Property="BorderThickness" Value="0 0 0 1"/>
+            <Setter Property="BorderBrush" Value="#3d3d3d"/>
+            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="Background" Value="#cccccc"/>
+        </Style>
+    </UserControl.Resources>
+    <Border  Background="Transparent">
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="50"/>
+                <ColumnDefinition Width="100"/>
+                <ColumnDefinition Width="50"/>
+                <ColumnDefinition Width="130"/>
+                <ColumnDefinition Width="100"/>
+                <ColumnDefinition Width="100"/>
+                <ColumnDefinition Width="160"/>
+            </Grid.ColumnDefinitions>
+            <Border Grid.Column="0" >
+                <Border Width="25" Height="25" Background="#ad0e1e">
+                    <Button Command="{Binding RemoveFilterCommand}" Background="Transparent" BorderThickness="0">
+                        <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="White" Text="X" FontWeight="Bold" FontSize="19"/>
+                    </Button>
+                </Border>
+            </Border>
+            <Border Grid.Column="1" BorderThickness="0 0 1 0">
+                <StackPanel Orientation="Horizontal">
+                    <Border Margin="0 0 20 0">
+                        <CheckBox 
+                        VerticalContentAlignment="Center" 
+                        HorizontalAlignment="Center"
+                        IsChecked="{Binding Filter.IsActive}"/>
+                    </Border>
+                    <TextBlock 
+                    FontSize="14"
+                    Foreground="#262626"
+                    VerticalAlignment="Center"
+                    HorizontalAlignment="Right"
+                    Margin="0 0 5 0"
+                    Text="{Binding Name, Mode=TwoWay}"/>
+                </StackPanel>
+            </Border>
+            <Border Grid.Column="2">
+                <StackPanel VerticalAlignment="Center">
+                    <RadioButton GroupName="{Binding TotalTypeGroupKey}" FontSize="14" IsChecked="{Binding IsOverChecked}"  Content="ТБ"/>
+                    <RadioButton GroupName="{Binding TotalTypeGroupKey}" FontSize="14" IsChecked="{Binding IsUnderChecked}"  Content="ТМ"/>
+                </StackPanel>
+                <!--<ComboBox
+                    SelectedItem="{Binding Filter.TotalType}"
+                    ItemsSource="{Binding TotalTypeList}">
+                    <ComboBox.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Text="{Binding Converter={StaticResource EnumDescriptionConverter}}"/>
+                        </DataTemplate>
+                    </ComboBox.ItemTemplate>
+                    
+                </ComboBox>-->
+            </Border>
+            <Border Grid.Column="3">
+                <ComboBox
+                    Height="30"
+                    VerticalAlignment="Center"
+                    SelectedItem="{Binding Filter.Part}"
+                    ItemsSource="{Binding TotalPartList}">
+                    <ComboBox.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding Converter={StaticResource EnumDescriptionConverter}}"/>
+                        </DataTemplate>
+                    </ComboBox.ItemTemplate>
+                </ComboBox>
+            </Border>
+            <Border Grid.Column="4">
+                <StackPanel Margin="10 0 0 0" HorizontalAlignment="Center" VerticalAlignment="Center">
+                    <RadioButton GroupName="{Binding TargetForParsingGroupKey}" FontSize="14" IsChecked="{Binding IsPrematchChecked}"  Content="Прематч"/>
+                    <RadioButton GroupName="{Binding TargetForParsingGroupKey}" FontSize="14" IsChecked="{Binding IsLiveChecked}"  Content="Лайв"/>
+                </StackPanel>
+            </Border>
+            <Border  Grid.Column="5">
+                <StackPanel HorizontalAlignment="Center" Orientation="Vertical">
+                    <TextBlock VerticalAlignment="Center" Foreground="#262626" Text="Параметр"/>
+                    <!--<TextBox Width="40" Text="{Binding Points, FallbackValue=2.5}"/>-->
+                    <ComboBox
+                        Height="25" 
+                        Width="60"
+                        SelectedIndex="{Binding TotalParameterSelectedIndex}"
+                        ItemsSource="{Binding ParameterValues}"
+                        SelectedItem="{Binding Points, Mode=TwoWay}"
+                        SelectedValue="{Binding ChoosenTotalParameter, Mode=TwoWay}"/>
+                </StackPanel>
+            </Border>
+            <Border  Grid.Column="6">
+                <StackPanel Orientation="Horizontal">
+                    <ComboBox
+                    VerticalAlignment="Center"
+                    Height="25"
+                    Width="60"
+                        Margin="0 0 10 0"
+                    SelectedItem="{Binding Filter.Condition}"
+                    ItemsSource="{Binding ConditionList}">
+                        <ComboBox.ItemTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding Converter={StaticResource EnumDescriptionConverter}}"/>
+                            </DataTemplate>
+                        </ComboBox.ItemTemplate>
+                    </ComboBox>
+                    <TextBox Text="{Binding From}" Width="30" Margin="0 0 10 0"/>
+                    <TextBox IsEnabled="{Binding Filter.Condition, Converter={StaticResource ConditionToEnabledConverter}}" Text="{Binding To}" Width="30"/>
+                </StackPanel>
+            </Border>
+            <!--<StackPanel Orientation="Horizontal" Grid.Column="2">
+                <TextBox 
+                    VerticalAlignment="Center" 
+                    Width="35" 
+                    HorizontalContentAlignment="Center" 
+                    Margin="5" 
+                    Text="{Binding Filter.From, FallbackValue=1}"/>
+                <TextBox 
+                    VerticalAlignment="Center" 
+                    Width="35" 
+                    HorizontalContentAlignment="Center"
+                    Margin="5" 
+                    Text="{Binding Filter.To, FallbackValue=1}"/>
+            </StackPanel>-->
+        </Grid>
+    </Border>
+</UserControl>

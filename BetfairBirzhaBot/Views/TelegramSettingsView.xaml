@@ -1,0 +1,105 @@
+﻿<UserControl x:Class="BetfairBirzhaBot.Views.TelegramSettingsView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:BetfairBirzhaBot.Views"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800"
+             xmlns:controls="clr-namespace:BetfairBirzhaBot.Controls">
+    <UserControl.Resources>
+        <Style TargetType="{x:Type Button}">
+            <Setter Property="Height" Value="25"/>
+            <Setter Property="Background" Value="#525252"/>
+            <Setter Property="Foreground" Value="#d1d1d1"/>
+            <Setter Property="BorderThickness" Value="0 0 0 2"/>
+            <Setter Property="BorderBrush" Value="#3d3d3d"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type Button}">
+                        <Border Background="{TemplateBinding Background}" BorderBrush="#3d3d3d" BorderThickness="0 0 0 1">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="#383838"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <Style TargetType="{x:Type TextBox}">
+            <Setter Property="Height" Value="25"/>
+            <Setter Property="Foreground" Value="#2e2e2e"/>
+            <Setter Property="BorderThickness" Value="0 0 0 1"/>
+            <Setter Property="BorderBrush" Value="#3d3d3d"/>
+            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="Background" Value="#cccccc"/>
+        </Style>
+
+        <Style TargetType="{x:Type TextBlock}">
+            <Setter Property="Foreground" Value="#262626"/>
+        </Style>
+
+
+
+        <Style TargetType="{x:Type ComboBox}">
+            <Setter Property="Background" Value="#262626"/>
+            <Setter Property="BorderThickness" Value="0 0 0 1"/>
+        </Style>
+    </UserControl.Resources>
+    <Border Background="#d4d2d2">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="50"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <Border BorderBrush="#919191" BorderThickness="0 0 0 2">
+                <TextBlock 
+                    Text="{Binding Title, FallbackValue=Title}"
+                    FontSize="20"
+                    VerticalAlignment="Center"
+                    Padding="20 0 0 0"
+                    />
+            </Border>
+            <Border Grid.Row="1">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="300"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <StackPanel>
+                        <CheckBox
+                            IsChecked="{Binding TelegramSettings.IsEnabled}"
+                            FontSize="15"
+                            Content="Включить Telegram бот"
+                            Margin="20"/>
+                        <TextBlock
+                            FontSize="15"
+                            HorizontalAlignment="Center" 
+                            Text="API Ключ бота"/>
+                        <TextBox
+                            Margin="0 10 0 0"
+                            Height="40"
+                            Width="300"
+                            FontSize="15"
+                            HorizontalAlignment="Center" 
+                            Text="{Binding TelegramSettings.Key, Mode=TwoWay}"/>
+                        <Button Margin="0 30" Height="40" FontSize="16" Content="Сохранить" Command="{Binding SaveCommand}"/>
+                    </StackPanel>
+                    <Border Padding="20" Background="#C0C0C0" HorizontalAlignment="Left" Grid.Column="1" >
+                        <StackPanel>
+                            <TextBlock 
+                                FontSize="16" HorizontalAlignment="Center" Text="Настройки сообщений телеграмма"/>
+                            <controls:TelegramMesageSettingsControl 
+                                DataContext="{Binding TelegramSettings.MessageSettings, Mode=TwoWay}" />
+                        </StackPanel>
+                    </Border>
+                </Grid>
+            </Border>
+        </Grid>
+    </Border>
+</UserControl>

@@ -1,0 +1,343 @@
+﻿<UserControl x:Class="BetfairBirzhaBot.Views.StrategyManagerView"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:BetfairBirzhaBot.Views"
+      mc:Ignorable="d" 
+             xmlns:filterControls="clr-namespace:BetfairBirzhaBot.Controls.Filters"
+             xmlns:controls="clr-namespace:BetfairBirzhaBot.Controls"
+      xmlns:converters="clr-namespace:BetfairBirzhaBot.Converters"
+             MinHeight="700">
+    <UserControl.Resources>
+        <converters:EnumDescriptionConverter x:Key="EnumDescriptionConverter"/>
+        <converters:TotalToVisibilityConverter x:Key="TotalToVisibilityConverter"/>
+        <converters:CorrectScoreToVisibilityConverter x:Key="CorrectScoreToVisibilityConverter"/>
+        <converters:BothToScoreToVisibilityConverter x:Key="BothToScoreToVisibilityConverter"/>
+        <converters:ConditionToEnabledConverter x:Key="ConditionToEnabledConverter"/>
+
+        <Style TargetType="{x:Type Button}">
+            <Setter Property="Height" Value="25"/>
+            <Setter Property="Background" Value="#525252"/>
+            <Setter Property="Foreground" Value="#d1d1d1"/>
+            <Setter Property="BorderThickness" Value="0 0 0 2"/>
+            <Setter Property="BorderBrush" Value="#3d3d3d"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type Button}">
+                        <Border Background="{TemplateBinding Background}" BorderBrush="#3d3d3d" BorderThickness="0 0 0 1">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="#383838"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <Style TargetType="{x:Type TextBox}">
+            <Setter Property="Height" Value="25"/>
+            <Setter Property="Foreground" Value="#2e2e2e"/>
+            <Setter Property="BorderThickness" Value="0 0 0 1"/>
+            <Setter Property="BorderBrush" Value="#3d3d3d"/>
+            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="Background" Value="#cccccc"/>
+        </Style>
+
+        <Style TargetType="{x:Type TextBlock}">
+            <Setter Property="Height" Value="25"/>
+            <Setter Property="Foreground" Value="#262626"/>
+        </Style>
+
+        
+
+        <Style TargetType="{x:Type ComboBox}">
+            <Setter Property="Background" Value="#cccccc"/>
+            <Setter Property="BorderThickness" Value="0 0 0 1"/>
+
+
+        </Style>
+
+    </UserControl.Resources>
+
+    <Border Background="#d4d2d2">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="50"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <Border BorderBrush="#919191" BorderThickness="0 0 0 2">
+                <TextBlock 
+                    Text="{Binding Title, FallbackValue=Title}"
+                    FontSize="20"
+                    VerticalAlignment="Center"
+                    Padding="20 0 0 0"
+                    />
+            </Border>
+            <Grid Grid.Row="1">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition MinWidth="900"/>
+                    <ColumnDefinition MinWidth="300"/>
+                    <ColumnDefinition MinWidth="350"/>
+                </Grid.ColumnDefinitions>
+
+                <Border Background="#d4d2d2">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+                        <Border Padding="0 10" BorderThickness="0 0 0 1" BorderBrush="#3d3d3d" >
+                            <StackPanel Orientation="Horizontal">
+                                <Border Padding="5" Margin="10 0 20 0">
+                                    <StackPanel>
+                                        <TextBlock FontSize="16" Margin="0" Padding="0" HorizontalAlignment="Center" Text="Добавление фильтров"/>
+                                        <ComboBox Width="170"
+                                ItemsSource="{Binding AllFilterTypes}"
+                                SelectedItem="{Binding ChoosenFilter}">
+                                            <ComboBox.ItemTemplate>
+                                                <DataTemplate>
+                                                    <TextBlock Text="{Binding Converter={StaticResource EnumDescriptionConverter}}"/>
+                                                </DataTemplate>
+                                            </ComboBox.ItemTemplate>
+                                        </ComboBox>
+                                        <Button Padding="5"  Command="{Binding AddFilterCommand}" Content="Добавить фильтр"/>
+                                    </StackPanel>
+                                </Border>
+                                <Border BorderBrush="#3d3d3d" Margin="20 0"  Padding="5">
+                                    <StackPanel Width="150">
+                                        <TextBlock 
+                                            Margin="0 0 0 5"
+                                            Text="Фильтр время матча"
+                                            FontWeight="Bold"/>
+                                        <StackPanel Orientation="Horizontal">
+                                            <ComboBox
+                                            Width="50"
+                                            Margin="5 0"
+                    SelectedItem="{Binding ChoosenStrategy.TimeFilter.Condition}"
+                    ItemsSource="{Binding ConditionList}">
+                                                <ComboBox.ItemTemplate>
+                                                    <DataTemplate>
+                                                        <TextBlock Text="{Binding Converter={StaticResource EnumDescriptionConverter}}"/>
+                                                    </DataTemplate>
+                                                </ComboBox.ItemTemplate>
+                                            </ComboBox>
+                                            <TextBox  
+                                            Margin="5 0"
+                                            Width="35" 
+                                            Text="{Binding ChoosenStrategy.TimeFilter.FromMinutes, FallbackValue=1}"/>
+                                            <TextBox IsEnabled="{Binding ChoosenStrategy.TimeFilter.Condition, Converter={StaticResource ConditionToEnabledConverter}}"  Margin="5 0" Width="35" Text="{Binding ChoosenStrategy.TimeFilter.ToMinutes}"/>
+                                        </StackPanel>
+                                    </StackPanel>
+                                </Border>
+                                <Border Margin="20 0" Width="195" Padding="5" >
+                                    <CheckBox
+                                    HorizontalAlignment="Center"
+                                    Foreground="#262626"
+                                    FontWeight="Light"
+                                VerticalAlignment="Center"
+                                FontSize="18"
+                                VerticalContentAlignment="Center"
+                                Content="Включить стратегию"
+                                IsChecked="{Binding ChoosenStrategy.IsActive}"
+                                />
+                                </Border>
+                            </StackPanel>
+                        </Border>
+                        <Border Grid.Row="1">
+                            <filterControls:FiltersContainer DataContext="{Binding FilterItemsContainerViewModel}"/>
+                        </Border>
+                    </Grid>
+                </Border>
+                <Border Background="#d4d2d2" Grid.Column="1">
+                    <StackPanel>
+                        <Border Height="100" Background="#f79205">
+                            <TextBlock 
+                            Foreground="#1a1a1a"
+                            FontWeight="Black"
+                            FontSize="17"
+                            HorizontalAlignment="Center"
+                            TextAlignment="Center"
+                            VerticalAlignment="Center"
+                            Text="Настройки ставки"
+                            />
+
+                        </Border>
+                        <StackPanel>
+                            <Border Padding="15">
+                                <StackPanel>
+                                    <TextBlock 
+                                        Margin="0 0 0 10"
+                                        Text="Рынок для ставки"/>
+                                    <ComboBox 
+                                    SelectedItem="{Binding ChoosenStrategy.Bet.Market}"
+                                    ItemsSource="{Binding BettingMarketTypes}">
+                                        <ComboBox.ItemTemplate>
+                                            <DataTemplate>
+                                                <TextBlock Text="{Binding Converter={StaticResource EnumDescriptionConverter}}"/>
+                                            </DataTemplate>
+                                        </ComboBox.ItemTemplate>
+                                    </ComboBox>
+
+                                    <Border Visibility="{Binding ChoosenStrategy.Bet.Market, Converter={StaticResource TotalToVisibilityConverter}}">
+                                        <StackPanel>
+                                            <StackPanel  Margin="0 30 0 0" Orientation="Horizontal">
+                                                <TextBlock
+                                        Width="100"
+                                        Margin="0 0 20 0"
+                                        FontFamily="Tahoma"  Text="Тотал"/>
+                                                <ComboBox 
+                                        ItemsSource="{Binding TotalTypeList}" 
+                                        SelectedItem="{Binding ChoosenStrategy.Bet.TotalType}"
+                                        Margin="0 0 20 0" Width="70">
+                                                    <ComboBox.ItemTemplate>
+                                                        <DataTemplate>
+                                                            <TextBlock Text="{Binding Converter={StaticResource EnumDescriptionConverter}}"/>
+                                                        </DataTemplate>
+                                                    </ComboBox.ItemTemplate>
+                                                </ComboBox>
+                                                <ComboBox Width="60" ItemsSource="{Binding TotalParameterValues}" SelectedValue="{Binding ChoosenBetTotalParameter}"/>
+                                                <!--<TextBox Width="60"
+                                                     Text="{Binding ChoosenStrategy.Bet.TotalParameter, FallbackValue=1}"/>-->
+                                            </StackPanel>
+                                            <StackPanel  Margin="0 10 0 0" Orientation="Horizontal">
+                                                <TextBlock
+                                        Width="100"
+                                        Margin="0 0 20 0"
+                                        FontFamily="Tahoma" 
+                                                Text="Период"/>
+                                                <ComboBox 
+                                        ItemsSource="{Binding TotalTimeTypeList}" 
+                                        SelectedItem="{Binding ChoosenStrategy.Bet.TotalTimePart}"
+                                        Margin="0 0 20 0" Width="150">
+                                                    <ComboBox.ItemTemplate>
+                                                        <DataTemplate>
+                                                            <TextBlock Text="{Binding Converter={StaticResource EnumDescriptionConverter}}"/>
+                                                        </DataTemplate>
+                                                    </ComboBox.ItemTemplate>
+                                                </ComboBox>
+                                            </StackPanel>
+                                        </StackPanel>
+                                    </Border>
+
+                                    <Border>
+                                        <StackPanel Visibility="{Binding ChoosenStrategy.Bet.Market, Converter={StaticResource CorrectScoreToVisibilityConverter}}" Margin="0 10 0 0" Orientation="Horizontal">
+                                            <TextBlock
+                                        Width="100"
+                                        Margin="0 0 20 0"
+                                        FontFamily="Tahoma" Text="Точный счёт"/>
+                                            <TextBox 
+                                        Margin="0 0 20 0" 
+                                        Width="70"
+                                        Text="{Binding ChoosenStrategy.Bet.Home}"/>
+                                            <TextBox 
+                                        Width="60" 
+                                        Text="{Binding ChoosenStrategy.Bet.Away}"/>
+                                        </StackPanel>
+                                    </Border>
+
+                                    <Border>
+                                        <StackPanel Visibility="{Binding ChoosenStrategy.Bet.Market, Converter={StaticResource BothToScoreToVisibilityConverter}}" Margin="0 10 0 0" Orientation="Horizontal">
+                                            <TextBlock
+                                        Width="100"
+                                        Margin="0 0 20 0"
+                                        FontFamily="Tahoma" Text="Обе забьют"/>
+                                            <ComboBox 
+                                        Margin="0 0 20 0" 
+                                        Width="70"
+                                        ItemsSource="{Binding BothToScoreTypes}"
+                                        SelectedItem="{Binding ChoosenStrategy.Bet.BothToScoreType}"/>
+                                        </StackPanel>
+                                    </Border>
+
+
+
+                                    <StackPanel Margin="0 10 0 0" Orientation="Horizontal">
+                                        <TextBlock
+                                        Width="100"
+                                        Margin="0 0 20 0"
+                                        FontFamily="Tahoma" Text="Сумма ставки"/>
+                                        <TextBox Width="150" Text="{Binding ChoosenStrategy.Bet.Stake}"/>
+                                    </StackPanel>
+
+                                    <Border Margin="0 50 0 0">
+                                        <Button Command="{Binding SaveStrategyCommand}" Content="Сохранить" Width="150" Height="30"/>
+                                    </Border>
+
+                                    
+
+                                </StackPanel>
+
+                            </Border>
+                            <Image Height="200px" Stretch="Fill" Source="pack://application:,,,/logo.jpg" />
+                        </StackPanel>
+                    </StackPanel>
+                </Border>
+                <Border Background="#bfbfbf" Grid.Column="2">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="AUto"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+                        <Border Padding="20 0">
+                            <StackPanel>
+                                <TextBlock
+                                FontSize="16"
+                                FontWeight="Bold"
+                            Margin="0 10 0 5"
+                            Text="Управление стратегиями"
+                            HorizontalAlignment="Center"/>
+                                <Button
+                                    FontSize="16"
+                            Height="40"
+                            Content="Добавить новую стратегию"
+                            Command="{Binding AddStrategyCommand}"/>
+                                <Button
+                                FontSize="16"
+                            Height="40"
+                            Command="{Binding SaveStrategyCommand}"
+                            Content="Сохранить выбранную стратегию"/>
+                                <Button
+                                FontSize="16"
+                            Height="40"
+                            Command="{Binding RemoveStrategyCommand}"
+                            Content="Удалить выбранную стратегию"/>
+                                <TextBlock  
+                                    FontSize="16"
+                            Margin="0 10 0 0"
+                            Text="Название стратегии"
+                            HorizontalAlignment="Center"/>
+                                <TextBox
+                                    Height="40"
+                                    FontSize="16"
+                            HorizontalContentAlignment="Center"
+                            Text="{Binding ChoosenStrategy.Name, FallbackValue=Name}"/>
+                            </StackPanel>
+                        </Border>
+                        <Border Margin="0 15 0 0 " Grid.Row="1">
+                            <StackPanel>
+                                <TextBlock
+                                FontSize="16"
+                                HorizontalAlignment="Center"
+                                Text="Список стратегий"/>
+                                <ListBox Height="360" ScrollViewer.VerticalScrollBarVisibility="Visible" Background="Transparent" FontSize="16" 
+                    ItemsSource="{Binding Strategies}"
+                    SelectedItem="{Binding ChoosenStrategy}">
+                                    <ListBox.ItemTemplate>
+                                        <DataTemplate>
+                                            <TextBlock FontSize="16" Text="{Binding Name}"/>
+                                        </DataTemplate>
+                                    </ListBox.ItemTemplate>
+                                </ListBox>
+                            </StackPanel>
+                        </Border>
+                    </Grid>
+                </Border>
+            </Grid>
+        </Grid>
+    </Border>
+</UserControl>

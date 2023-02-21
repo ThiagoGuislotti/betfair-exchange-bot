@@ -1,0 +1,166 @@
+﻿<UserControl x:Class="BetfairBirzhaBot.Views.LeaguesBlackListView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:BetfairBirzhaBot.Views"
+             mc:Ignorable="d" 
+             >
+    <UserControl.Resources>
+        <Style TargetType="{x:Type Button}">
+            <Setter Property="Height" Value="25"/>
+            <Setter Property="Background" Value="#525252"/>
+            <Setter Property="Foreground" Value="#d1d1d1"/>
+            <Setter Property="BorderThickness" Value="0 0 0 2"/>
+            <Setter Property="BorderBrush" Value="#3d3d3d"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type Button}">
+                        <Border Background="{TemplateBinding Background}" BorderBrush="#3d3d3d" BorderThickness="0 0 0 1">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="#383838"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <Style TargetType="{x:Type TextBox}">
+            <Setter Property="Height" Value="25"/>
+            <Setter Property="Foreground" Value="#2e2e2e"/>
+            <Setter Property="BorderThickness" Value="0 0 0 1"/>
+            <Setter Property="BorderBrush" Value="#3d3d3d"/>
+            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="Background" Value="#cccccc"/>
+        </Style>
+
+        <Style TargetType="{x:Type TextBlock}">
+            <Setter Property="Height" Value="25"/>
+            <Setter Property="Foreground" Value="#262626"/>
+        </Style>
+
+
+
+        <Style TargetType="{x:Type ComboBox}">
+            <Setter Property="Background" Value="#cccccc"/>
+            <Setter Property="BorderThickness" Value="0 0 0 1"/>
+            <Setter Property="Width" Value="300px"/>
+            
+
+        </Style>
+
+    </UserControl.Resources>
+    <Border Background="#d4d2d2">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="50"/>
+                <RowDefinition Height="50"/>
+                <RowDefinition Height="40"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <Border BorderBrush="#919191" BorderThickness="0 0 0 2">
+                <TextBlock 
+                    Text="{Binding Title, FallbackValue=Title}"
+                    FontSize="20"
+                    VerticalAlignment="Center"
+                    Padding="20 0 0 0"
+                    />
+            </Border>
+            <Border Grid.Row="1">
+                <StackPanel>
+                        <StackPanel Height="50" Orientation="Horizontal">
+                            <Border Padding="20 0" Width="150" BorderBrush="Black" BorderThickness="0 0 1 0">
+                                <TextBlock FontSize="16" VerticalAlignment="Center" Text="Список лиг"/>
+                            </Border>
+
+                        <ComboBox
+                            Margin="30 0 0 0"
+                            Height="35"
+                            Width="170"
+                                ItemsSource="{Binding Strategies}"
+                                SelectedItem="{Binding ChoosenStrategy}"
+                                  DisplayMemberPath="Name">
+                        </ComboBox>
+                        <Button
+                            Margin="10 0"
+                            Height="35"
+                            Width="120"
+                            Content="Сохранить"
+                            FontSize="16"
+                            Command="{Binding SaveCommand}"/>
+                        <Button
+                            Height="35"
+                            Width="150"
+                            Content="Выделить все"
+                            FontSize="16"
+                            Margin="0 0 10 0"
+                            Command="{Binding SelectAllCommand}"/>
+                        <Button
+                            Height="35"
+                            Width="150"
+                            Content="Сбросить всё"
+                            FontSize="16"
+                            Margin="0 0 10 0"
+                            Command="{Binding DeselectAllCommand}"/>
+                        <Button
+                            Height="35"
+                            Width="200"
+                            Content="Удалить выделенные"
+                            FontSize="16"
+                            
+                            Command="{Binding RemoveSelectedCommand}"/>
+                    </StackPanel>
+                        
+                    </StackPanel>
+
+            </Border>
+            <Border Grid.Row="2">
+                <StackPanel Orientation="Horizontal">
+                    <Border Padding="20 0" Width="150" BorderBrush="Black" BorderThickness="0 0 1 0">
+                        <TextBlock FontSize="16" VerticalAlignment="Center" Text="Название лиги"/>
+                        
+                    </Border>
+                    <TextBox  Margin="30 0 0 0" Width="500px" Text="{Binding CurrentFilterSearch}"/>
+                    <Button
+                            Margin="10 0"
+                            Height="35"
+                            Width="200"
+                            Content="Поиск"
+                            FontSize="16"/>
+                </StackPanel>
+            </Border>
+
+            <Border Background="DarkGray" Grid.Row="3">
+                <ScrollViewer Height="800">
+                    <Border>
+                        <ItemsControl ScrollViewer.VerticalScrollBarVisibility="Visible" ScrollViewer.CanContentScroll="True" Background="#C0C0C0" ItemsSource="{Binding CurrentLeagues}">
+                            <ItemsControl.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <StackPanel />
+                                </ItemsPanelTemplate>
+                            </ItemsControl.ItemsPanel>
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <Border BorderBrush="#9A9A9A"
+                                        BorderThickness="0 0 0 1" Height="30">
+                                        <StackPanel Orientation="Horizontal">
+                                            <Border Width="100" Height="25">
+                                                <CheckBox VerticalAlignment="Center" VerticalContentAlignment="Center" FontSize="16" IsChecked="{Binding SelectedItem}" Content="Выделить"/>
+                                            </Border>
+                                            <CheckBox  VerticalAlignment="Center" VerticalContentAlignment="Center" FontSize="16" IsChecked="{Binding IncludeToBlacklist}" Content="{Binding Name}"/>
+                                        </StackPanel>
+                                    </Border>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </Border>
+                </ScrollViewer>
+            </Border>
+        </Grid>
+    </Border>
+</UserControl>
